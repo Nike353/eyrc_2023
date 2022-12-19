@@ -56,8 +56,8 @@ def right_steering(err_bright,err_fright):       # left wall follow PD controlle
     derr_bright = err_bright - last_err_bright
     derr_fright = err_fright - last_err_fright
     velocity_msg = Twist()
-    velocity_msg.linear.x = 0.5 + 0.4*(err_fright) + 10*(derr_fright)
-    velocity_msg.angular.z = 0.5*(err_bright) + 9*derr_bright + 1.1*(err_fright)
+    velocity_msg.linear.x = 0.3 + 0.4*(err_fright) + 10*(derr_fright)
+    velocity_msg.angular.z = -(0.5*(err_bright) + 9*derr_bright + 1.1*(err_fright))
     last_err_bright = err_bright
     last_err_fright = err_fright
     return velocity_msg
@@ -75,7 +75,6 @@ def percep_nav_callback(data):
         if data.data=="yellow":
             pub1.publish("PLUCK_YELLOW")
         else:
-            velocity_msg.linear.x=-0.01
             pub1.publish("PLUCK_RED")
     else :
         change = 0
@@ -101,13 +100,13 @@ def control_loop():
     global state
     global regions
     global complete
-    rospy.sleep(5)
+    rospy.sleep(6)
 
 
     while not rospy.is_shutdown():
         
         if state==0:
-            if regions['bleft']<0.8:
+            if regions['bleft']<0.73:
                 state=1
             else:
                 velocity_msg.linear.x=0.5
@@ -125,7 +124,7 @@ def control_loop():
                             break
                         
                     
-                velocity_msg= left_steering(regions['bleft']-0.67,regions['fleft']-0.83)
+                velocity_msg= right_steering(regions['bright']-0.61,regions['fright']-0.75)
                 pub.publish(velocity_msg)
             else:
                 state =2

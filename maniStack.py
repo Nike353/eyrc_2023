@@ -40,22 +40,23 @@ arm_group=moveit_commander.MoveGroupCommander("arm")
 hand_group=moveit_commander.MoveGroupCommander("gripper")
 
 # #left view
-# lst_joint_angles_1 = [math.radians(85.5),
+# lst_joint_angles_1 = [math.radians(87),
 #                         math.radians(-53),
 #                         math.radians(-1),
 #                         math.radians(40),
 #                         math.radians(1),
 #                         math.radians(1)]
-# arm_group.set_joint_value_targetlst_joint_angles_1)
+# arm_group.set_joint_value_target(lst_joint_angles_1)
 # arm_group.plan()
 # flag_plan_1=arm_group.go()
 
-lst_joint_angles_1 = [math.radians(85.5),
-                        math.radians(-5),
-                        math.radians(-15),
-                        math.radians(0),
-                        math.radians(0),
-                        math.radians(0)]
+#rightview
+lst_joint_angles_1 = [math.radians(-90),
+                        math.radians(-45),
+                        math.radians(2),
+                        math.radians(29),
+                        math.radians(1),
+                        math.radians(1)]
 arm_group.set_joint_value_target(lst_joint_angles_1)
 arm_group.plan()
 flag_plan_1=arm_group.go()
@@ -65,20 +66,23 @@ rospy.sleep(1)
 
 while not rospy.is_shutdown():
     if fruit=="PLUCK_RED":
-    
-        listener = tf.TransformListener()
-        listener.waitForTransform("fruit_red", "ebot_base", rospy.Time(), rospy.Duration(4))
-        (trans_r,rot_r) = listener.lookupTransform('ebot_base', 'fruit_red', rospy.Time(0))
+        try:
+            listener = tf.TransformListener()
+            listener.waitForTransform("fruit_red", "ebot_base", rospy.Time(), rospy.Duration(6))
+            (trans_r,rot_r) = listener.lookupTransform('ebot_base', 'fruit_red', rospy.Time(0))
+        except (tf.Exception, tf.LookupException, tf.ConnectivityException):
+            continue
         red_pose = geometry_msgs.msg.Pose()
-        red_pose.position.x = trans_r[0]-0.01
-        red_pose.position.y = trans_r[1]-0.20
-        red_pose.position.z = trans_r[2]-0.01
+        red_pose.position.x = trans_r[0]-0.05
+        red_pose.position.y = trans_r[1]-0.25
+        red_pose.position.z = trans_r[2]-0.05
         (red_pose.orientation.x,red_pose.orientation.y,red_pose.orientation.z,red_pose.orientation.w) = quaternion_from_euler(2.833,0.0009,3.108)
         pose_values = arm_group.get_current_pose().pose
         arm_group.set_pose_target(red_pose)
         flag_plan = arm_group.go()
         hand_group.set_named_target("close")
         plan1=hand_group.go()
+        rospy.sleep(40)
         #revert back to red basket position
         lst_joint_angles_3 = [math.radians(-20),
                             math.radians(0),
@@ -95,16 +99,17 @@ while not rospy.is_shutdown():
         plan2=hand_group.go()
         
                 #left view
-        lst_joint_angles_1 = [math.radians(85.5),
-                                math.radians(-53),
-                                math.radians(-1),
-                                math.radians(40),
+        #rightview
+        lst_joint_angles_1 = [math.radians(-96),
+                                math.radians(-43),
+                                math.radians(2),
+                                math.radians(25),
                                 math.radians(1),
                                 math.radians(1)]
         arm_group.set_joint_value_target(lst_joint_angles_1)
         arm_group.plan()
         flag_plan_1=arm_group.go()
-
+ 
         
         arm_group.set_joint_value_target(lst_joint_angles_1)
         arm_group.plan()
@@ -113,18 +118,33 @@ while not rospy.is_shutdown():
         pub.publish("none")
         
     elif fruit=="PLUCK_YELLOW":
-        
-        listener = tf.TransformListener()
-        listener.waitForTransform("fruit_yellow", "ebot_base", rospy.Time(), rospy.Duration(5))
-        (trans_y,rot_y) = listener.lookupTransform('ebot_base', 'fruit_yellow', rospy.Time(0))    
+        try:
+
+            listener = tf.TransformListener()
+            listener.waitForTransform("fruit_yellow", "ebot_base", rospy.Time(), rospy.Duration(5))
+            (trans_y,rot_y) = listener.lookupTransform('ebot_base', 'fruit_yellow', rospy.Time(0))    
+        except (tf.Exception, tf.LookupException, tf.ConnectivityException):
+            continue
         
         
 
         yellow_pose = geometry_msgs.msg.Pose()
-        yellow_pose.position.x = trans_y[0]+0.05
-        yellow_pose.position.y = trans_y[1]-0.21
-        yellow_pose.position.z = trans_y[2]+0.18
+        yellow_pose.position.x = trans_y[0]-0.05
+        yellow_pose.position.y = trans_y[1]-0.20
+        yellow_pose.position.z = trans_y[2]-0.08
         (yellow_pose.orientation.x,yellow_pose.orientation.y,yellow_pose.orientation.z,yellow_pose.orientation.w) = quaternion_from_euler(-2.604,-0.001,-2.7208)
+        
+        lst_joint_angles_1 = [math.radians(-96),
+                                math.radians(13),
+                                math.radians(-26),
+                                math.radians(25),
+                                math.radians(1),
+                                math.radians(1)]
+        arm_group.set_joint_value_target(lst_joint_angles_1)
+        arm_group.plan()
+        flag_plan_1=arm_group.go()
+
+
         pose_values = arm_group.get_current_pose().pose
         arm_group.set_pose_target(yellow_pose)
         flag_plan = arm_group.go()
@@ -145,10 +165,17 @@ while not rospy.is_shutdown():
         hand_group.set_named_target("open")
         plan4=hand_group.go()
 
-        pub.publish("OKIE")
+        lst_joint_angles_1 = [math.radians(-90),
+                        math.radians(-45),
+                        math.radians(2),
+                        math.radians(29),
+                        math.radians(1),
+                        math.radians(1)]
         arm_group.set_joint_value_target(lst_joint_angles_1)
         arm_group.plan()
         flag_plan_1=arm_group.go()
+
+        pub.publish("OKIE")
     
     else:
         pass

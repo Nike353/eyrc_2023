@@ -119,7 +119,7 @@ def depth_clbck(depth_msg):
                 br.sendTransform((X,Y,Z),(0,0,0,1),rospy.Time.now(),'fruit_red','camera_depth_frame2')
             else :
                 br = tf.TransformBroadcaster()
-                br.sendTransform((X/5,Y/5,Z/5),(0,0,0,1),rospy.Time.now(),'fruit_red','camera_depth_frame2')
+                br.sendTransform((X/6,Y/6,Z/6),(0,0,0,1),rospy.Time.now(),'fruit_red','camera_depth_frame2')
             pub_rgb.publish(str('red'))
         
     elif len(pose_yellow)>0:
