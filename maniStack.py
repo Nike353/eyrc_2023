@@ -21,90 +21,8 @@ pub=rospy.Publisher("/mani_nav",String,queue_size=10)
 def nav_mani_callback(data):
     global count
     global fruit 
-
-    
-
     fruit = data.data
-    # if data.data=="PLUCK_RED":
-        
-
-    #     red_pose = geometry_msgs.msg.Pose()
-    #     red_pose.position.x = trans_r[0]-0.01
-    #     red_pose.position.y = trans_r[1]-0.32
-    #     red_pose.position.z = trans_r[2]-0.12
-    #     (red_pose.orientation.x,red_pose.orientation.y,red_pose.orientation.z,red_pose.orientation.w) = quaternion_from_euler(2.833,0.0009,3.108)
-    #     pose_values = arm_group.get_current_pose().pose
-    #     arm_group.set_pose_target(red_pose)
-    #     flag_plan = arm_group.go()
-
-    #     hand_group.set_named_target("close")
-    #     plan1=hand_group.go()
-
-    #     lst_joint_angles_3 = [math.radians(-20),
-    #                  math.radians(0),
-    #                  math.radians(0),
-    #                  math.radians(0),
-    #                  math.radians(0),
-    #                  math.radians(0)]
-    #     arm_group.set_joint_value_target(lst_joint_angles_3)
-    #     arm_group.plan()
-    #     flag_plan_3=arm_group.go()
-    #     hand_group.set_named_target("open")
-    #     plan2=hand_group.go()
-
-    #     lst_joint_angles_1 = [math.radians(90),
-    #                     math.radians(-53),
-    #                     math.radians(2),
-    #                     math.radians(40),
-    #                     math.radians(1),
-    #                     math.radians(1)]
-    #     arm_group.set_joint_value_target(lst_joint_angles_1)
-    #     arm_group.plan()
-    #     flag_plan_1=arm_group.go()
-    #     count+=1
-    #     pub.publish("PLUCKED")
-
-    # elif data.data=="PLUCK_YELLOW":
-
-        
-
-    #     yellow_pose = geometry_msgs.msg.Pose()
-    #     yellow_pose.position.x = trans_y[0]+0.11
-    #     yellow_pose.position.y = trans_y[1]-0.25
-    #     yellow_pose.position.z = trans_y[2]+0.15
-    #     (yellow_pose.orientation.x,yellow_pose.orientation.y,yellow_pose.orientation.z,yellow_pose.orientation.w) = quaternion_from_euler(-2.604,-0.001,-2.7208)
-    #     pose_values = arm_group.get_current_pose().pose
-    #     arm_group.set_pose_target(yellow_pose)
-    #     flag_plan = arm_group.go()
-
-    #     hand_group.set_named_target("close")
-    #     plan1=hand_group.go()
-
-    #     lst_joint_angles_7 = [math.radians(15),
-    #                  math.radians(0),
-    #                  math.radians(0),
-    #                  math.radians(0),
-    #                  math.radians(0),
-    #                  math.radians(0)]
-    #     arm_group.set_joint_value_target(lst_joint_angles_7)
-    #     arm_group.plan()
-    #     flag_plan_7=arm_group.go()
-
-    #     hand_group.set_named_target("open")
-    #     plan4=hand_group.go()
-
-    #     lst_joint_angles_1 = [math.radians(90),
-    #                     math.radians(-53),
-    #                     math.radians(2),
-    #                     math.radians(40),
-    #                     math.radians(1),
-    #                     math.radians(1)]
-    #     arm_group.set_joint_value_target(lst_joint_angles_1)
-    #     arm_group.plan()
-    #     flag_plan_1=arm_group.go()
-    #     count+=1
-    #     pub.publish("PLUCKED")
-
+    
 
 #initialize
 moveit_commander.roscpp_initialize(sys.argv)
@@ -122,33 +40,39 @@ arm_group=moveit_commander.MoveGroupCommander("arm")
 hand_group=moveit_commander.MoveGroupCommander("gripper")
 
 # #left view
-lst_joint_angles_1 = [math.radians(90),
-                        math.radians(-53),
-                        math.radians(2),
-                        math.radians(40),
-                        math.radians(1),
-                        math.radians(1)]
+# lst_joint_angles_1 = [math.radians(85.5),
+#                         math.radians(-53),
+#                         math.radians(-1),
+#                         math.radians(40),
+#                         math.radians(1),
+#                         math.radians(1)]
+# arm_group.set_joint_value_targetlst_joint_angles_1)
+# arm_group.plan()
+# flag_plan_1=arm_group.go()
+
+lst_joint_angles_1 = [math.radians(85.5),
+                        math.radians(-5),
+                        math.radians(-15),
+                        math.radians(0),
+                        math.radians(0),
+                        math.radians(0)]
 arm_group.set_joint_value_target(lst_joint_angles_1)
 arm_group.plan()
 flag_plan_1=arm_group.go()
+
 
 rospy.sleep(1)
 
 while not rospy.is_shutdown():
     if fruit=="PLUCK_RED":
-        # try:
-        #     listener = tf.TransformListener()
-        #     listener.waitForTransform("fruit_red", "ebot_base", rospy.Time(), rospy.Duration(3))
-        #     (trans_r,rot_r) = listener.lookupTransform('ebot_base', 'fruit_red', rospy.Time(0))    
-        # except(tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException,tf.Exception):
-        #     continue
+    
         listener = tf.TransformListener()
-        listener.waitForTransform("fruit_red", "ebot_base", rospy.Time(), rospy.Duration(3))
+        listener.waitForTransform("fruit_red", "ebot_base", rospy.Time(), rospy.Duration(4))
         (trans_r,rot_r) = listener.lookupTransform('ebot_base', 'fruit_red', rospy.Time(0))
         red_pose = geometry_msgs.msg.Pose()
-        red_pose.position.x = trans_r[0]-0.08
-        red_pose.position.y = trans_r[1]-0.26
-        red_pose.position.z = trans_r[2]-0.05
+        red_pose.position.x = trans_r[0]-0.01
+        red_pose.position.y = trans_r[1]-0.20
+        red_pose.position.z = trans_r[2]-0.01
         (red_pose.orientation.x,red_pose.orientation.y,red_pose.orientation.z,red_pose.orientation.w) = quaternion_from_euler(2.833,0.0009,3.108)
         pose_values = arm_group.get_current_pose().pose
         arm_group.set_pose_target(red_pose)
@@ -170,24 +94,35 @@ while not rospy.is_shutdown():
         hand_group.set_named_target("open")
         plan2=hand_group.go()
         
-        pub.publish("OKIE")
+                #left view
+        lst_joint_angles_1 = [math.radians(85.5),
+                                math.radians(-53),
+                                math.radians(-1),
+                                math.radians(40),
+                                math.radians(1),
+                                math.radians(1)]
         arm_group.set_joint_value_target(lst_joint_angles_1)
         arm_group.plan()
         flag_plan_1=arm_group.go()
+
+        
+        arm_group.set_joint_value_target(lst_joint_angles_1)
+        arm_group.plan()
+        flag_plan_1=arm_group.go()
+        pub.publish("OKIE")
         pub.publish("none")
         
     elif fruit=="PLUCK_YELLOW":
-        # try:
-        #     listener = tf.TransformListener()
-        #     listener.waitForTransform("fruit_yellow", "ebot_base", rospy.Time(), rospy.Duration(3))
-        #     (trans_y,rot_y) = listener.lookupTransform('ebot_base', 'fruit_yellow', rospy.Time(0))    
-        # except(tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException,tf.Exception):
-        #     continue
+        
+        listener = tf.TransformListener()
+        listener.waitForTransform("fruit_yellow", "ebot_base", rospy.Time(), rospy.Duration(5))
+        (trans_y,rot_y) = listener.lookupTransform('ebot_base', 'fruit_yellow', rospy.Time(0))    
+        
         
 
         yellow_pose = geometry_msgs.msg.Pose()
-        yellow_pose.position.x = trans_y[0]+0.09
-        yellow_pose.position.y = trans_y[1]-0.25
+        yellow_pose.position.x = trans_y[0]+0.05
+        yellow_pose.position.y = trans_y[1]-0.21
         yellow_pose.position.z = trans_y[2]+0.18
         (yellow_pose.orientation.x,yellow_pose.orientation.y,yellow_pose.orientation.z,yellow_pose.orientation.w) = quaternion_from_euler(-2.604,-0.001,-2.7208)
         pose_values = arm_group.get_current_pose().pose
@@ -217,6 +152,7 @@ while not rospy.is_shutdown():
     
     else:
         pass
+
 #rightview
 # lst_joint_angles_1 = [math.radians(-90),
 #                         math.radians(-45),

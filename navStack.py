@@ -43,7 +43,7 @@ def left_steering(err_bleft,err_fleft):       # left wall follow PD controller
     derr_bleft = err_bleft - last_err_bleft
     derr_fleft = err_fleft - last_err_fleft
     velocity_msg = Twist()
-    velocity_msg.linear.x = 0.2 + 0.7*(err_fleft) + 10*(derr_fleft)
+    velocity_msg.linear.x = 0.3 + 0.7*(err_fleft) + 10*(derr_fleft)
     velocity_msg.angular.z = 0.7*(err_bleft) + 10*derr_bleft + 1.1*(err_fleft)
     last_err_bleft = err_bleft
     last_err_fleft = err_fleft
@@ -56,7 +56,7 @@ def right_steering(err_bright,err_fright):       # left wall follow PD controlle
     derr_bright = err_bright - last_err_bright
     derr_fright = err_fright - last_err_fright
     velocity_msg = Twist()
-    velocity_msg.linear.x = 0.4 + 0.4*(err_fright) + 10*(derr_fright)
+    velocity_msg.linear.x = 0.5 + 0.4*(err_fright) + 10*(derr_fright)
     velocity_msg.angular.z = 0.5*(err_bright) + 9*derr_bright + 1.1*(err_fright)
     last_err_bright = err_bright
     last_err_fright = err_fright
@@ -101,7 +101,7 @@ def control_loop():
     global state
     global regions
     global complete
-    rospy.sleep(8)
+    rospy.sleep(5)
 
 
     while not rospy.is_shutdown():
@@ -125,7 +125,7 @@ def control_loop():
                             break
                         
                     
-                velocity_msg= left_steering(regions['bleft']-0.66,regions['fleft']-0.8)
+                velocity_msg= left_steering(regions['bleft']-0.67,regions['fleft']-0.83)
                 pub.publish(velocity_msg)
             else:
                 state =2

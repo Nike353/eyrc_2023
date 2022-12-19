@@ -42,7 +42,7 @@ pub_rgb = []
 pub_depth =[]
 low_yellow = np.array([93,120,93])
 high_yellow = np.array([113,255,255])
-low_red = np.array([111,140,0])
+low_red = np.array([114,136,0])
 high_red = np.array([255,255,255])
 ################# ADD UTILITY FUNCTIONS HERE #################
 
@@ -110,8 +110,8 @@ def depth_clbck(depth_msg):
         depth_val.append(res[pose_red[0][0],pose_red[0][1]])
         x= pose_red[0][0]
         y = pose_red[0][1]
-        X = depth_val[0]*((x-320.5)/554.3827128226441)
-        Y = depth_val[0]*((y-240.5)/554.3827128226441)
+        X = depth_val[0]*((x-400.5)/476.7030836014194)
+        Y = depth_val[0]*((y-400.5)/476.7030836014194)
         Z = depth_val[0]
         if depth_val[0]<4:
             if depth_val[0]<1:
@@ -126,8 +126,8 @@ def depth_clbck(depth_msg):
         depth_val.append(res[pose_yellow[0][0],pose_yellow[0][1]])
         x= pose_yellow[0][0]
         y = pose_yellow[0][1]
-        X = depth_val[0]*((x-320.5)/554.3827128226441)
-        Y = depth_val[0]*((y-240.5)/554.3827128226441)
+        X = depth_val[0]*((x-400.5)/476.7030836014194)
+        Y = depth_val[0]*((y-400.5)/476.7030836014194)
         Z = depth_val[0]
         
         if depth_val[0]<4:
